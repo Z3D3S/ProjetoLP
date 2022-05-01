@@ -1,0 +1,80 @@
+@charset "UTF-8";
+/**
+ * @license
+ * Copyright 2019 Google LLC. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/*
+ * Always set the map height explicitly to define the size of the div element
+ * that contains the map.
+ */
+
+
+#map {
+  height: 100%;
+}
+
+/*
+ * Optional: Makes the sample page fill the window.
+ */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+#floating-panel {
+  top: 10px;
+  padding-left: 10px;
+  background-color: #f8f8f8;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  padding-right: 10px;
+  text-align: center;
+  font-family: "Roboto", "sans-serif";
+  font-size: 20px;
+  align-content: center;
+
+}
+
+#search{
+  background-color: #c7511b; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 23px;
+}
+
+#Sumary {
+  top: 10px;
+  left: 40%;
+  font-family: "Roboto", "sans-serif";
+  resize: both;
+  padding-top: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 25px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Create two unequal columns that floats next to each other */
+.column {
+  float: left;
+  height: 610px;
+}
+
+.left {
+  width: 30%;
+  background-color: #e8eaed;
+}
+
+.right {
+  width: 70%;
+}

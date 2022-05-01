@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+ @license
+ Copyright 2019 Google LLC. All Rights Reserved.
+ SPDX-License-Identifier: Apache-2.0
+-->
+<html>
+<head>
+    <title>PROJETO</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script type="module" src="./index.ts"></script>
+</head>
+<body>
+<div class="row">
+    <div class="column left">
+        <div id="floating-panel" style="background-color: #7bc58f">
+            <b style="font-size: 25px">Start: </b>
+            <input type="text" id="origem" placeholder="Origem..." style="width: 80%; font-size: 30px; border: 2px solid rgb(134, 134, 134);border-radius: 8px;"/>
+            <br>
+            <br>
+            <b style="font-size: 25px">End: </b>
+            <input type="text" id="destino" placeholder="Destino..." style="width: 80%; font-size: 30px; border: 2px solid rgb(134, 134, 134);border-radius: 8px;"/>
+            <br>
+            <br>
+            <button id="search">Buscar</button>
+        </div>
+
+        <div id = "Sumary" class="modal">
+        </div>
+    </div>
+    <div class="column right" style="background-color:#f8f8f8;">
+        <div id="map">
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--
+ The `defer` attribute causes the callback to execute after the full HTML
+ document has been parsed. For non-blocking uses, avoiding race conditions,
+ and consistent behavior across browsers, consider loading using Promises
+ with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+-->
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlMhRPBkMyJMQVNcPq1RgSHVJLrtOa7wk&callback=initMap&v=weekly"
+        defer
+></script>
+</body>
+</html>
+
+© 2022 GitHub, Inc.
+
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+
+Loading complete
