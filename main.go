@@ -43,12 +43,14 @@ func (p program) Stop(s service.Service) error {
 }
 
 func (p program) run() {
-	router := httprouter.New()
-	router.POST("/search", serveCarona)
-	err := http.ListenAndServe("localhost:8080", router)
-	if err != nil {
-		fmt.Println("Problem starting web server: " + err.Error())
-		os.Exit(-1)
+	for serviceIsRunning {
+		router := httprouter.New()
+		router.POST("/search", serveCarona)
+		err := http.ListenAndServe("localhost:8080", router)
+		if err != nil {
+			fmt.Println("Problem starting web server: " + err.Error())
+			os.Exit(-1)
+		}
 	}
 }
 
