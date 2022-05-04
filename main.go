@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/julienschmidt/sse"
 	"github.com/kardianos/service"
 	"net/http"
 	"os"
@@ -17,8 +16,8 @@ var (
 	writingSync      sync.Mutex
 )
 
-const serviceName = "Medium service"
-const serviceDescription = "Simple service, just for fun"
+const serviceName = "Servico de Caronas"
+const serviceDescription = "Simples protitipo de aplicativo de carona, just for fun and for prof.ladeira"
 
 type program struct{}
 
@@ -45,14 +44,7 @@ func (p program) Stop(s service.Service) error {
 
 func (p program) run() {
 	router := httprouter.New()
-	timer := sse.New()
-	//router.ServeFiles("/js/*filepath", http.Dir("js"))
-	router.ServeFiles("/css/*filepath", http.Dir("css"))
-	router.GET("/", serveHomepage)
 	router.POST("/search", serveCarona)
-	router.POST("/get_time", getTime)
-	router.Handler("GET", "/time", timer)
-	go streamTime(timer)
 	err := http.ListenAndServe("localhost:8080", router)
 	if err != nil {
 		fmt.Println("Problem starting web server: " + err.Error())
