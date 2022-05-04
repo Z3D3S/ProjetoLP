@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -37,10 +38,10 @@ type Duration struct {
 }
 
 func GetJson(origem string, destino string, ch chan []byte) {
-	url := "https://maps.google.com.br/maps/api/distancematrix/json?origins=" + url.QueryEscape(origem) + "&destinations=" + url.QueryEscape(destino) + "&key=AIzaSyDlMhRPBkMyJMQVNcPq1RgSHVJLrtOa7wk"
+	URL := "https://maps.google.com.br/maps/api/distancematrix/json?origins=" + url.QueryEscape(origem) + "&destinations=" + url.QueryEscape(destino) + "&key=" + API
 	method := "GET"
 	client := &http.Client{}
-	req, err := http.NewRequest(method, url, nil)
+	req, err := http.NewRequest(method, URL, nil)
 
 	if err != nil {
 		fmt.Println(err)
@@ -50,9 +51,12 @@ func GetJson(origem string, destino string, ch chan []byte) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
 
-	defer res.Body.Close()
-
+		}
+	}(res.Body)
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println(err)
@@ -60,10 +64,10 @@ func GetJson(origem string, destino string, ch chan []byte) {
 	ch <- body
 }
 func GetJsonSemgo(origem string, destino string) []byte {
-	url := "https://maps.google.com.br/maps/api/distancematrix/json?origins=" + url.QueryEscape(origem) + "&destinations=" + url.QueryEscape(destino) + "&key=AIzaSyDlMhRPBkMyJMQVNcPq1RgSHVJLrtOa7wk"
+	URL := "https://maps.google.com.br/maps/api/distancematrix/json?origins=" + url.QueryEscape(origem) + "&destinations=" + url.QueryEscape(destino) + "&key=" + API
 	method := "GET"
 	client := &http.Client{}
-	req, err := http.NewRequest(method, url, nil)
+	req, err := http.NewRequest(method, URL, nil)
 
 	if err != nil {
 		fmt.Println(err)
@@ -73,9 +77,12 @@ func GetJsonSemgo(origem string, destino string) []byte {
 	if err != nil {
 		fmt.Println(err)
 	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
 
-	defer res.Body.Close()
-
+		}
+	}(res.Body)
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println(err)
@@ -174,17 +181,25 @@ func serveCarona(writer http.ResponseWriter, request *http.Request, params httpr
 	/*route2 := GetJsonSemgo(carona.Origem, carona.Destino)*/
 	//o tempo em media utilizando as goroutines é 2x mais rapido do fazendo sem elas
 	//fiz uma outra função para demonstrar na sala de aula.
-	json.Unmarshal(route2, &result2)
+	err = json.Unmarshal(route2, &result2)
+	if err != nil {
+		return
+	}
 	for i := 0; i < 61; i++ {
 		go GetJson(teste_uber[i].Origem, carona.Origem, ch1)
 		go GetJson(carona.Destino, teste_uber[i].Destino, ch3)
 		route1 := <-ch1
 		/*route1 := GetJsonSemgo(teste_uber[i].Origem, carona.Origem)*/
-		json.Unmarshal(route1, &result1)
+		err = json.Unmarshal(route1, &result1)
+		if err != nil {
+			return
+		}
 		route3 := <-ch3
 		/*route3 := GetJsonSemgo(carona.Destino, teste_uber[i].Destino)*/
-		json.Unmarshal(route3, &result3)
-
+		err = json.Unmarshal(route3, &result3)
+		if err != nil {
+			return
+		}
 		var percurso int = (result1.Rows[0].Elements[0].Duration.Value +
 			result2.Rows[0].Elements[0].Duration.Value +
 			result3.Rows[0].Elements[0].Duration.Value)
@@ -194,7 +209,10 @@ func serveCarona(writer http.ResponseWriter, request *http.Request, params httpr
 		}
 
 	}
-	json.NewEncoder(writer).Encode(melhor)
+	err = json.NewEncoder(writer).Encode(melhor)
+	if err != nil {
+		return
+	}
 	writingSync.Lock()
 	programIsRunning = false
 	writingSync.Unlock()
