@@ -1,2 +1,2 @@
 # ProjetoLP
-projeto de LP
+projeto de Linguagens de Programação
